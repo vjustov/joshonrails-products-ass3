@@ -1,0 +1,16 @@
+
+
+<h1><%=  @product.name %></h1>
+<p><%= @product.description%></p>
+<p><b><%= @product.price%></b></p>
+<p><%= @product.tags%></p>
+
+<p><%= @product.reviews %></p>
+
+<h1>Reviews</h1>
+<% unless @product.reviews.nil? %>
+  <% @product.reviews.each do |re| %>
+    <%= "<h2>#{re.title}</h2><p>this product earned #{re.rating} stars</p><p>#{re.text}</p>" %>
+  <% end %>
+<% end %>
+<a href=<%= "/review_form/#{@product.product_code}" %> class="btn btn-primary">Come on! Lets bash this thing together</a>

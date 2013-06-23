@@ -1,0 +1,23 @@
+<form  action=<% if @product.nil? %>
+			<%= "http://localhost:4567/api/v1/products" %>
+		<% else %>
+			<%= "http://localhost:4567/api/v1/products/#{@product.product_code}" %> 
+			<% end %> 
+			method="post">
+	<fieldset>
+		<legend>Lets all create a new product</legend>
+		<%# debugger %>
+		<input name="name" type="text" placeholder="Name goes here" value=<%= "#{@product.name}" unless @product.nil? %> >
+		<input name="description" type="text" placeholder="Description goes here" value=<%= "#{@product.description}" unless @product.nil? %> >
+		<input name="price" type="text" placeholder="Price goes here" value=<%= "#{@product.price}"  unless @product.nil? %> >
+		<input name="tags" type="text" placeholder="tags go here" value=<%= "#{@product.tags}" unless @product.nil? %> >
+		<input type="hidden" name="_method" value=
+		<% if @product.nil? %>
+			<%= "POST" %>
+		<% else %>
+			<%= "PUT" %>
+		<% end %>
+		>
+		<input type="submit" text="Submit"  value="Let's do IT!">
+	</fieldset>
+</form>

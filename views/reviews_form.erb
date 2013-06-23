@@ -1,0 +1,8 @@
+<h1>Spew out your toughts on the matter princess.</h1>
+<form action=<%= "/api/v1/reviews/#{@product_code}" %> method="post">
+<input class="span12" name="title" type="text" placeholder="Title" width="100%"><br/>
+<input class="span12" name="rating" type="text" placeholder="Rating"><br/>
+<input class="span12" name="text" type="text" placeholder="Comments"><br/>
+
+<input class="btn btn-primary" type="submit" text="Submit"  value="Add Review">
+</form>

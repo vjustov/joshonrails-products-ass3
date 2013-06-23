@@ -1,19 +1,28 @@
+<% #url = "http://a-super-awesome-api.herokuapp.com/api/v1/products" %>
+<% #resp = Net::HTTP.get_response(URI.parse(url)) %>
+<% #@data = JSON.parse resp.body.read %>
+	<% if @products.nil? %>
+		<h1>All your products are belong to us. your data is in another castle. whatever floats your boat.</h1>
+		<% else %>
 <table class="table">
 	<tr>
 		<th>Product Code</th>
 		<th>Name</th>
-		<th>Details</th>
 		<th>Price</th>
 		<th>Description</th>
 		<th>Tags</th>
+		<th><a href="/form" class="btn btn-primary">Wanna add another?</a></th>
 	</tr>
 	<% @products.each do |p| %>
 	<tr>
 		<td><%= p.product_code %></td>
-		<td><%= p.product_code %></td>
-		<td><%= p.product_code %></td>
-		<td><%= p.product_code %></td>
-		<td><%= p.product_code %></td>
-	</tr>
+		<td><%= p.name %></td>
+		<td><%= p.price %></td>
+		<td><%= p.description %></td>
+    	<td><%= p.tags %></td>
+    	<td><a href=<%= "/api/v1/products/#{p.product_code}" %> >Show</a> | <a href=<%= "/form/#{p.product_code}" %> >Edit</a> | <a href=<%= "/destroy/#{p.product_code}" %> >Destroy!</a></td>
+  	</tr>
   <% end %>
 </table>
+<% end %>
+<a href="/clean" class="btn btn-primary">Are things too messy? lets clean up a bit.</a>

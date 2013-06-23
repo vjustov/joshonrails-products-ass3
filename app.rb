@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
-require 'debugger'
+require 'debugger' if development?
 require 'mongoid'
 require 'json'
 

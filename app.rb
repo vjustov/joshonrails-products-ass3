@@ -158,6 +158,7 @@ end
 
 get '/api/v1/reviews' do
   reviews = Review.all
+  debugger
   reviews.to_json
 end
 

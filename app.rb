@@ -27,6 +27,8 @@ class Product
   field :tags, type: Array
   field :reviews, type: Array
 
+  embeds_many :reviews
+
 end
 
 class Review
@@ -34,6 +36,8 @@ class Review
   field :title, type: String
   field :text, type: String
   field :rating, type: Integer
+
+  embedded_in :product
 end
 
 get '/' do
@@ -81,6 +85,20 @@ get '/api/v1/products' do
   erb :home
 end
 
+get '/top10' do
+  # content_type 'application/json'
+  products = Product.all.entries
+  # debugger
+  avrgs = {}
+  products.each do |p| 
+    avrgs[p.name] = p.reviews.map { |r| r['rating'].to_i }.reduce(:+).div(p.reviews.size) if p.reviews.size > 0
+    # debugger
+  end
+
+  @lalala = avrgs.to_json
+  erb :average
+end
+
 get '/api/v1/products/:id' do
   # debugger
   @product = Product.where(product_code: params[:id]).first
@@ -103,6 +121,7 @@ post '/api/v1/products' do
   request_data['product_code'] = Product.all.distinct('product_code').sort.last || 0
   request_data['product_code'] += 1
   request_data['reviews'] = []
+  request_data.delete '_method'
   # debugger
   unless request_data.nil? || request_data['product_code'].nil? || request_data['name'].nil? || request_data['price'].nil? || request_data['description'].nil? 
   @product = Product.new request_data 
@@ -158,36 +177,34 @@ end
 
 get '/api/v1/reviews' do
   reviews = Review.all
-  debugger
+  # debugger
   reviews.to_json
 end
 
 post '/api/v1/reviews/:id' do
-  debugger
+  # debugger
   request_data = unless params.nil? 
       JSON.parse params.to_json
     else 
       JSON.parse request.body.read 
   end
 
-  if request_data.nil? && request_data.text.nil? && request_data.rating.nil?
+  if request_data.nil? && request_data['text'].empty? && request_data['rating'].empty?
     halt 400
-  else
+  end
+  
     @product =  Product.find_by(product_code: params[:id])
     debugger
-    unless @product['reviews'].nil?
-      @product['reviews'] << request_data
-    else
-      request_data.delete 'splat'
-      request_data.delete 'id'
-      request_data.delete 'captures'
-      @product['reviews'] = []
-      debugger
-      @product['reviews'] << request_data
-    end
+    request_data.delete 'splat'
+    request_data.delete 'id'
+    request_data.delete 'captures'
+    array  = @product['reviews'] 
+    array << request_data
+    @product.update_attributes(reviews: array)
+    
     #review = Review.new request_data
-  end
-
+  
+  debugger
   halt 500 unless @product.save
 
   erb :products_show

@@ -1,0 +1,56 @@
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+	
+
+    	var data0 = <%= @lalala %>
+     	var data = []
+		for (var i in data0)
+			data.push(data0[i]);
+
+
+  //   	data = Object.getValues(data0)
+
+        var chart = d3.select("body > div.container").append("svg")
+	     .attr("class", "chart")
+	     .attr("width", 500)
+	     .attr("height", 20 * data.length);
+
+	    var x = d3.scale.linear()
+	     .domain([0, d3.max(data)])
+	     .range([0, 500]);
+
+	    chart.selectAll("rect")
+	     .data(data)
+		 .enter().append("rect")
+	     .attr("y", function(d, i) { return i * 20; })
+	     .attr("width", x)
+	     .attr("width", x)
+	     .attr("height", 20);
+
+	    chart.selectAll("rect")
+	     .style.fill="steelblue";
+
+		chart.selectAll("line")
+	     .data(x.ticks(10))
+		 .enter().append("line")
+	     .attr("x1", x)
+	     .attr("x2", x)
+	     .attr("y1", 0)
+	     .attr("y2", 120)
+	     .style("stroke", "#ccc");
+
+	     chart.selectAll(".rule")
+	     .data(x.ticks(10))
+	   	 .enter().append("text")
+	     .attr("class", "rule")
+	     .attr("x", x)
+	     .attr("y", 0)
+	     .attr("dy", -3)
+	     .attr("text-anchor", "middle")
+	     .text(String);
+    
+		// chart.append("line")
+	 //     .attr("y1", 0)
+	 //     .attr("y2", 120)
+	 //     .style("stroke", "#000");
+</script>
